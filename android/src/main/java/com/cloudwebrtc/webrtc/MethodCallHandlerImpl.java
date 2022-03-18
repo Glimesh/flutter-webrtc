@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
+import android.media.AudioAttributes;
 import android.util.Log;
 import android.util.LongSparseArray;
 
@@ -147,9 +148,11 @@ public class MethodCallHandlerImpl implements MethodCallHandler, StateProvider {
     getUserMediaImpl = new GetUserMediaImpl(this, context);
 
     audioDeviceModule = JavaAudioDeviceModule.builder(context)
-            .setUseHardwareAcousticEchoCanceler(true)
-            .setUseHardwareNoiseSuppressor(true)
-            .setSamplesReadyCallback(getUserMediaImpl.inputSamplesInterceptor)
+			.setUseStereoOutput(true).
+			setAudioAttributes(
+				AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
+					.setUsage(AudioAttributes.USAGE_MEDIA).build()
+			)
             .createAudioDeviceModule();
 
     getUserMediaImpl.audioDeviceModule = (JavaAudioDeviceModule) audioDeviceModule;
