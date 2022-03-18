@@ -147,12 +147,13 @@ public class MethodCallHandlerImpl implements MethodCallHandler, StateProvider {
 
     getUserMediaImpl = new GetUserMediaImpl(this, context);
 
+    AudioAttributes.Builder attributes = new AudioAttributes.Builder();
+    attributes.setContentType(AudioAttributes.CONTENT_TYPE_MOVIE);
+    attributes.setUsage(AudioAttributes.USAGE_MEDIA);
+
     audioDeviceModule = JavaAudioDeviceModule.builder(context)
-			.setUseStereoOutput(true).
-			setAudioAttributes(
-				AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
-					.setUsage(AudioAttributes.USAGE_MEDIA).build()
-			)
+			      .setUseStereoOutput(true)
+            .setAudioAttributes(attributes.build())
             .createAudioDeviceModule();
 
     getUserMediaImpl.audioDeviceModule = (JavaAudioDeviceModule) audioDeviceModule;
